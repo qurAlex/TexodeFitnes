@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TexodeFitnes
+namespace TexodeFitnes.ViewModel
 {
-    internal class ViewModel : INotifyPropertyChanged
+    internal class MainViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
@@ -34,6 +34,6 @@ namespace TexodeFitnes
         }
 
         //свойство только для чтения, оно считывается View каждый раз, когда обновляется Number1 или Number2
-        public int Number3 => (Number1+ Number2);
+        public int Number3 => Number1 + Number2;
     }
 }
