@@ -8,19 +8,26 @@ using System.Threading.Tasks;
 
 namespace TexodeFitnes.Model
 {
-    internal class User : INotifyPropertyChanged
+    internal class Users : INotifyPropertyChanged
     {
-        string _name;
+        string _user;
         string [] _status;
         int [] _rank;
         int [] _steps;
         int _upperSteps;
         int _lowerSteps;
         int _middleSteps;
-        public string Name
+
+        public Users()
         {
-            get { return _name; }
-            set { _name = value; }
+            _status = new string[30];
+            _rank = new int[30];
+            _steps = new int[30];
+        }
+        public string User
+        {
+            get { return _user; }
+            set { _user = value; OnPropertyChanged("User"); }
         }
 
         public int[] Rank
@@ -67,7 +74,7 @@ namespace TexodeFitnes.Model
         }
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

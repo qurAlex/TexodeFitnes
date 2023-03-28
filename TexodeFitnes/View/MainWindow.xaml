@@ -10,12 +10,18 @@
         <local1:MainViewModel/>
         <!-- Создаем новый VM и соединяем его со View -->
     </Window.DataContext>
-    <StackPanel>
-        <!--Binding, собственно, соединяет текстовое поле со свойством в VM -->
-        <!--UpdateSourceTrigger, в данном случае, выполняет передачу значение в VM в момент ввода -->
-        <TextBox Width="30" Text="{Binding Number1, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Width="30" Text="{Binding Number2, UpdateSourceTrigger=PropertyChanged}"/>
-        <!--Mode=OneWay необходим для призязки свойства только для чтения -->
-        <TextBox Width="30" Text="{Binding Number3, Mode=OneWay}" IsReadOnly="True"/>
-    </StackPanel>
+    <DataGrid x:Name="UserDataGrid"  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Users.Values}"  IsEnabled="True" 
+                  Width="610" HorizontalAlignment="Left"
+                  SelectionMode="Single"
+                  IsReadOnly="True" Grid.RowSpan="2" Grid.Column="0"
+                  SelectedItem="{Binding SelectedUser}">
+
+        <DataGrid.Columns>
+            <DataGridTextColumn  CanUserReorder="False" Header="Фамилия и имя" Binding="{Binding User}" Width="140"  />
+            <DataGridTextColumn CanUserReorder="False" Header="Среднее количество шагов в день" Binding="{Binding MiddleSteps}" Width="220" />
+            <DataGridTextColumn CanUserReorder="False" Header="Лучший результат" Binding="{Binding UpperSteps}" Width="120" />
+            <DataGridTextColumn CanUserReorder="False" Header="Худший результат" Binding="{Binding LowerSteps}" Width="120" />
+        </DataGrid.Columns>
+    </DataGrid>
 </Window>
