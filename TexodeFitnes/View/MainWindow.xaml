@@ -3,25 +3,57 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TexodeFitnes" xmlns:local1="clr-namespace:TexodeFitnes.ViewModel"
+        xmlns:local="clr-namespace:TexodeFitnes" xmlns:local1="clr-namespace:TexodeFitnes.ViewModel" xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1200" WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <local1:MainViewModel/>
         <!-- Создаем новый VM и соединяем его со View -->
     </Window.DataContext>
-    <DataGrid x:Name="UserDataGrid"  AutoGenerateColumns="False"
-                  ItemsSource="{Binding Users.Values}"  IsEnabled="True" 
-                  Width="610" HorizontalAlignment="Left"
-                  SelectionMode="Single"
-                  IsReadOnly="True" Grid.RowSpan="2" Grid.Column="0"
-                  SelectedItem="{Binding SelectedUser}">
 
-        <DataGrid.Columns>
-            <DataGridTextColumn  CanUserReorder="False" Header="Фамилия и имя" Binding="{Binding User}" Width="140"  />
-            <DataGridTextColumn CanUserReorder="False" Header="Среднее количество шагов в день" Binding="{Binding MiddleSteps}" Width="220" />
-            <DataGridTextColumn CanUserReorder="False" Header="Лучший результат" Binding="{Binding UpperSteps}" Width="120" />
-            <DataGridTextColumn CanUserReorder="False" Header="Худший результат" Binding="{Binding LowerSteps}" Width="120" />
-        </DataGrid.Columns>
-    </DataGrid>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <DataGrid x:Name="UserDataGrid"  AutoGenerateColumns="False"
+                      ItemsSource="{Binding Users.Values}"  IsEnabled="True" 
+                      Width="auto" HorizontalAlignment="Left"
+                      SelectionMode="Single"
+                      IsReadOnly="True" Grid.RowSpan="2" Grid.Column="0"
+                      SelectedItem="{Binding SelectedUser}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn  CanUserReorder="False" Header="Фамилия и имя" Binding="{Binding User}" Width="140"  />
+                <DataGridTextColumn CanUserReorder="False"  Binding="{Binding MiddleSteps}" Width="140" >
+                    <DataGridTextColumn.Header>
+                        <TextBlock TextWrapping="Wrap">
+                            Среднее количество шагов в день
+                        </TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn CanUserReorder="False" Header="Лучший результат" Binding="{Binding UpperSteps}" Width="120" />
+                <DataGridTextColumn CanUserReorder="False" Header="Худший результат" Binding="{Binding LowerSteps}" Width="120" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <oxy:PlotView Model="{Binding MyModel}" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="2"
+                   Grid.Row="0" Grid.RowSpan="2"
+                   HorizontalAlignment="Center"
+               VerticalAlignment="Center" FontSize="40"
+               Text="{Binding MessageError}" Panel.ZIndex="1"
+                   Background="LightGray"
+               />
+        <CheckBox Grid.Row="0" Grid.Column="1"
+                  VerticalAlignment="Center"
+                  Content="Линейный график"
+                  IsChecked="{Binding StepsChart}"/>
+    </Grid>
+    
 </Window>
