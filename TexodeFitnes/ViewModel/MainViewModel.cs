@@ -1,19 +1,25 @@
-﻿using OxyPlot;
+﻿using Microsoft.Win32;
+using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using TexodeFitnes.Model;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TexodeFitnes.ViewModel
 {
@@ -75,6 +81,59 @@ namespace TexodeFitnes.ViewModel
             }
         }
 
+        ICommand _saveFileCommand;
+        public ICommand SaveFileCommand 
+        {
+            get
+            {
+                if (_saveFileCommand == null)
+                    _saveFileCommand = new RelayCommand(o => SaveFile());
+                return _saveFileCommand;
+            }
+        }
+
+        void SaveFile() 
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "JSON файлы(.json) | *.json";
+            dialog.FileName = SelectedUser.User;
+            dialog.DefaultExt = ".json";
+            var result = dialog.ShowDialog();
+            
+            if (result == true)
+            {
+                string file = dialog.FileName;
+                JSONwrite(file);
+            }
+        }
+
+        public bool SaveEnabled { get; private set; }
+
+        void JSONwrite(string file)
+        {
+            var options = new JsonSerializerOptions { Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic), WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(SelectedUser, options);
+            StreamWriter writer = new StreamWriter(file);
+            writer.WriteLine(jsonString);
+            writer.Close();
+        }
+        
+        ICommand _openFileCommand;
+        public ICommand OpenFileCommand 
+        {
+            get
+            {
+                if (_openFileCommand == null)
+                    _openFileCommand = new RelayCommand(o => OpenFile());
+                return _saveFileCommand;
+            }
+        }
+
+        void OpenFile() 
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.ShowDialog();
+        }
 
         string _messageError;
         public string MessageError
@@ -174,6 +233,8 @@ namespace TexodeFitnes.ViewModel
             {
                 this._selectedUser = value;
                 OnPropertyChanged("SelectedUser");
+                SaveEnabled = true;
+                OnPropertyChanged("SaveEnabled");
                 Chart();
             }
         }

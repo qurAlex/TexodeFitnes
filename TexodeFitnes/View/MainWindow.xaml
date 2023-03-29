@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TexodeFitnes" xmlns:local1="clr-namespace:TexodeFitnes.ViewModel" xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1200" WindowStartupLocation="CenterOwner">
+        Title="Шаги" Height="600" Width="1200" WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <local1:MainViewModel/>
         <!-- Создаем новый VM и соединяем его со View -->
@@ -13,10 +13,11 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="289*"/>
+            <ColumnDefinition Width="311*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -27,6 +28,7 @@
                   Width="auto" HorizontalAlignment="Left"
                   SelectionMode="Single"
                   IsReadOnly="True" Grid.RowSpan="2" Grid.Column="0"
+                  Grid.Row="1"
                   SelectedItem="{Binding SelectedUser}">
 
             <DataGrid.Columns>
@@ -51,21 +53,23 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>
-            
+
         </DataGrid>
 
-        <oxy:PlotView Model="{Binding MyModel}" Grid.Column="1" Grid.Row="1"/>
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="2"
-                   Grid.Row="0" Grid.RowSpan="2"
-                   HorizontalAlignment="Center"
-               VerticalAlignment="Center" FontSize="40"
-               Text="{Binding MessageError}" Panel.ZIndex="1"
-                   Background="LightGray"
-               />
-        <CheckBox Grid.Row="0" Grid.Column="1"
+        <oxy:PlotView Model="{Binding MyModel}" Grid.Column="1" Grid.Row="2"/>
+
+        <CheckBox Grid.Column="1"
+                  Grid.Row="1"
                   VerticalAlignment="Center"
                   Content="Линейный график"
-                  IsChecked="{Binding StepsChart}"/>
+                  IsChecked="{Binding StepsChart}" Height="15"/>
+
+        <Menu >
+            <MenuItem Header="Файл">
+                <MenuItem Header="Открыть" Command="{Binding OpenFileCommand}"/>
+                <MenuItem Header="Сохранить" Command="{Binding SaveFileCommand}" IsEnabled="{Binding SaveEnabled}"/>
+            </MenuItem>
+        </Menu>
     </Grid>
-    
+
 </Window>
