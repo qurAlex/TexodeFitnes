@@ -5,12 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Windows;
 using TexodeFitnes.Model;
 
 namespace TexodeFitnes.ViewModel
@@ -46,7 +48,7 @@ namespace TexodeFitnes.ViewModel
 
                     for (int j = 0; j < forecastNode.AsArray().Count; j++)
                     {
-                        
+
                         int rankNode = forecastNode![j]["Rank"]!.GetValue<int>();
                         string userNode = forecastNode![j]["User"]!.GetValue<string>();
                         string statusNode = forecastNode![j]["Status"]!.GetValue<string>();
@@ -58,6 +60,11 @@ namespace TexodeFitnes.ViewModel
                             _users[userNode].User = userNode;
                         }
                         _users[userNode].AddDay(i, rankNode, statusNode, stepsNode);
+                        if (_users[userNode].MiddleSteps * 0.2 > Math.Abs(_users[userNode].MiddleSteps - _users[userNode].UpperSteps))
+                        {
+                            OnPropertyChanged("DifSteps");
+                        }
+
                     }
                 }
             }
@@ -67,7 +74,6 @@ namespace TexodeFitnes.ViewModel
                 OnPropertyChanged("MessageEror");
             }
         }
-
 
 
         string _messageError;
@@ -85,6 +91,7 @@ namespace TexodeFitnes.ViewModel
             {
                 _stepsChart = value;
                 OnPropertyChanged("StepsChart");
+                Chart();
             }
         }
         public void Chart()
@@ -101,7 +108,7 @@ namespace TexodeFitnes.ViewModel
                     Color = OxyPlot.OxyColors.Blue,
                     StrokeThickness = 1,
                     InterpolationAlgorithm = InterpolationAlgorithms.UniformCatmullRomSpline,
-                    MarkerType = MarkerType.Circle,
+                    MarkerType = MarkerType.Circle
                 };
                 var upperStepsLine= new OxyPlot.Series.LineSeries()
                 {

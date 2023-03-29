@@ -11,12 +11,24 @@ namespace TexodeFitnes.Model
     internal class Users : INotifyPropertyChanged
     {
         string _user;
-        string [] _status;
-        int [] _rank;
-        int [] _steps;
+        string[] _status;
+        int[] _rank;
+        int[] _steps;
         int _upperSteps;
         int _lowerSteps;
         int _middleSteps;
+
+        public bool DifSteps
+        {
+            get
+            {
+                if (_middleSteps * 0.2 < Math.Abs(_middleSteps - _upperSteps) || _middleSteps * 0.2 < Math.Abs(_middleSteps - _lowerSteps))
+                {
+                    return true;
+                }
+                else return false;
+            }
+        }
 
         public Users()
         {
@@ -71,6 +83,7 @@ namespace TexodeFitnes.Model
             OnPropertyChanged("LowerSteps");
             _middleSteps = _steps.Sum() / _steps.Count();
             OnPropertyChanged("MiddleSteps");
+            OnPropertyChanged("DifSteps");
         }
 
 

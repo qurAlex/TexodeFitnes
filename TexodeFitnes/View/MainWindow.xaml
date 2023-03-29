@@ -22,11 +22,12 @@
         </Grid.RowDefinitions>
 
         <DataGrid x:Name="UserDataGrid"  AutoGenerateColumns="False"
-                      ItemsSource="{Binding Users.Values}"  IsEnabled="True" 
-                      Width="auto" HorizontalAlignment="Left"
-                      SelectionMode="Single"
-                      IsReadOnly="True" Grid.RowSpan="2" Grid.Column="0"
-                      SelectedItem="{Binding SelectedUser}">
+                  ItemsSource="{Binding Users.Values}" IsEnabled="True" 
+                  RowStyle="{Binding DifSteps}" 
+                  Width="auto" HorizontalAlignment="Left"
+                  SelectionMode="Single"
+                  IsReadOnly="True" Grid.RowSpan="2" Grid.Column="0"
+                  SelectedItem="{Binding SelectedUser}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn  CanUserReorder="False" Header="Фамилия и имя" Binding="{Binding User}" Width="140"  />
@@ -40,6 +41,17 @@
                 <DataGridTextColumn CanUserReorder="False" Header="Лучший результат" Binding="{Binding UpperSteps}" Width="120" />
                 <DataGridTextColumn CanUserReorder="False" Header="Худший результат" Binding="{Binding LowerSteps}" Width="120" />
             </DataGrid.Columns>
+
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DifSteps}" Value="true">
+                            <Setter Property="Background" Value="LightBlue" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+            
         </DataGrid>
 
         <oxy:PlotView Model="{Binding MyModel}" Grid.Column="1" Grid.Row="1"/>
