@@ -81,6 +81,47 @@ namespace TexodeFitnes.ViewModel
             }
         }
 
+        public void JSONread(string[] fileNames)
+        {
+            try
+            {
+                _users.Clear();
+                OnPropertyChanged("Users.Value");
+
+                for (int i = 0; i < fileNames.Length; i++)
+                {
+                    string jsonString = File.ReadAllText(fileNames[i]);
+                    JsonNode forecastNode = JsonNode.Parse(jsonString)!;
+
+                    for (int j = 0; j < forecastNode.AsArray().Count; j++)
+                    {
+
+                        int rankNode = forecastNode![j]["Rank"]!.GetValue<int>();
+                        string userNode = forecastNode![j]["User"]!.GetValue<string>();
+                        string statusNode = forecastNode![j]["Status"]!.GetValue<string>();
+                        int stepsNode = forecastNode![j]["Steps"]!.GetValue<int>();
+
+                        if (!_users.ContainsKey(userNode))
+                        {
+                            _users.Add(userNode, new Users());
+                            _users[userNode].User = userNode;
+                        }
+                        _users[userNode].AddDay(i, rankNode, statusNode, stepsNode);
+                        if (_users[userNode].MiddleSteps * 0.2 > Math.Abs(_users[userNode].MiddleSteps - _users[userNode].UpperSteps))
+                        {
+                            OnPropertyChanged("DifSteps");
+                        }
+
+                    }
+                }
+            }
+            catch
+            {
+                _messageError = "произошла ошибка чтения JSON файла";
+                OnPropertyChanged("MessageEror");
+            }
+        }
+
         ICommand _saveFileCommand;
         public ICommand SaveFileCommand 
         {
@@ -99,7 +140,6 @@ namespace TexodeFitnes.ViewModel
             dialog.FileName = SelectedUser.User;
             dialog.DefaultExt = ".json";
             var result = dialog.ShowDialog();
-            
             if (result == true)
             {
                 string file = dialog.FileName;
@@ -125,14 +165,22 @@ namespace TexodeFitnes.ViewModel
             {
                 if (_openFileCommand == null)
                     _openFileCommand = new RelayCommand(o => OpenFile());
-                return _saveFileCommand;
+                return _openFileCommand;
             }
         }
 
         void OpenFile() 
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.ShowDialog();
+            dialog.Filter = "JSON(.json)|*.json";
+            dialog.DefaultExt = ".json";
+            dialog.Multiselect = true;
+            var result = dialog.ShowDialog();
+            if (result == true)
+            {
+                string[] file = dialog.FileNames;
+                JSONread(file);
+            }
         }
 
         string _messageError;

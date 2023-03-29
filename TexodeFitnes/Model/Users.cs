@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace TexodeFitnes.Model
@@ -18,6 +19,7 @@ namespace TexodeFitnes.Model
         int _lowerSteps;
         int _middleSteps;
 
+        [JsonIgnore]
         public bool DifSteps
         {
             get

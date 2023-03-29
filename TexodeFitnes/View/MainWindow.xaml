@@ -23,8 +23,7 @@
         </Grid.RowDefinitions>
 
         <DataGrid x:Name="UserDataGrid"  AutoGenerateColumns="False"
-                  ItemsSource="{Binding Users.Values}" IsEnabled="True" 
-                  RowStyle="{Binding DifSteps}" 
+                  ItemsSource="{Binding Users.Values}" IsEnabled="True"
                   Width="auto" HorizontalAlignment="Left"
                   SelectionMode="Single"
                   IsReadOnly="True" Grid.RowSpan="2" Grid.Column="0"
