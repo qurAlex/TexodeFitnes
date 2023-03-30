@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace TexodeFitnes.Model
 {
-    internal class Users : INotifyPropertyChanged
+    internal class UserClass : INotifyPropertyChanged
     {
         string _user;
         string[] _status;
@@ -32,11 +32,18 @@ namespace TexodeFitnes.Model
             }
         }
 
-        public Users()
+        public UserClass()
         {
             _status = new string[30];
             _rank = new int[30];
             _steps = new int[30];
+        }
+
+        public UserClass(int count)
+        {
+            _status = new string[count];
+            _rank = new int[count];
+            _steps = new int[count];
         }
         public string User
         {

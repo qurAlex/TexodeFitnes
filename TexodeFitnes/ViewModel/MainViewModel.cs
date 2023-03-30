@@ -31,9 +31,9 @@ namespace TexodeFitnes.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        Dictionary<string,Users> _users = new Dictionary<string,Users>();
+        Dictionary<string,UserClass> _users = new Dictionary<string,UserClass>();
 
-        public Dictionary<string, Users> Users
+        public Dictionary<string, UserClass> Users
         {
             get { return _users; }
         }
@@ -62,7 +62,7 @@ namespace TexodeFitnes.ViewModel
 
                         if (!_users.ContainsKey(userNode))
                         {
-                            _users.Add(userNode, new Users());
+                            _users.Add(userNode, new UserClass());
                             _users[userNode].User = userNode;
                         }
                         _users[userNode].AddDay(i, rankNode, statusNode, stepsNode);
@@ -86,13 +86,13 @@ namespace TexodeFitnes.ViewModel
             try
             {
                 _users.Clear();
+                SelectedUser = null;
                 OnPropertyChanged("Users.Value");
 
                 for (int i = 0; i < fileNames.Length; i++)
                 {
                     string jsonString = File.ReadAllText(fileNames[i]);
                     JsonNode forecastNode = JsonNode.Parse(jsonString)!;
-
                     for (int j = 0; j < forecastNode.AsArray().Count; j++)
                     {
 
@@ -103,7 +103,7 @@ namespace TexodeFitnes.ViewModel
 
                         if (!_users.ContainsKey(userNode))
                         {
-                            _users.Add(userNode, new Users());
+                            _users.Add(userNode, new UserClass(fileNames.Length));
                             _users[userNode].User = userNode;
                         }
                         _users[userNode].AddDay(i, rankNode, statusNode, stepsNode);
@@ -113,6 +113,7 @@ namespace TexodeFitnes.ViewModel
                         }
 
                     }
+                    
                 }
             }
             catch
@@ -269,8 +270,8 @@ namespace TexodeFitnes.ViewModel
         public PlotModel MyModel { get; private set; }
 
 
-        private Users _selectedUser;
-        public Users SelectedUser
+        private UserClass _selectedUser;
+        public UserClass SelectedUser
         {
             get
             {
@@ -283,7 +284,8 @@ namespace TexodeFitnes.ViewModel
                 OnPropertyChanged("SelectedUser");
                 SaveEnabled = true;
                 OnPropertyChanged("SaveEnabled");
-                Chart();
+                if (_selectedUser != null) Chart();
+                else SaveEnabled = false;
             }
         }
 

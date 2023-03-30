@@ -27,7 +27,7 @@
                   Width="auto" HorizontalAlignment="Left"
                   SelectionMode="Single"
                   IsReadOnly="True" Grid.RowSpan="2" Grid.Column="0"
-                  Grid.Row="1"
+                  Grid.Row="1" 
                   SelectedItem="{Binding SelectedUser}">
 
             <DataGrid.Columns>
